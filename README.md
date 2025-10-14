@@ -14,7 +14,7 @@ A análise foi conduzida com base na linguagem `Python`, utilizando bibliotecas 
 
 ## 🎯 Propósito Analítico
 
-O objetivo é criar o **Índice de Risco de Congestionamento (IRC)** mensal para cada unidade judicial, gerando **alertas automatizados em dashboards de BI** para as comarcas com maior risco previsto nos próximos 3 meses. Isso permite que a gestão do Tribunal aloque forças-tarefa de forma proativa, estratégica e baseada em dados.
+O objetivo é criar o **Índice de Risco de Congestionamento Mensal (IRCM)** para cada unidade judicial, gerando **alertas automatizados em dashboards de BI** para as comarcas com maior risco previsto nos próximos 3 meses. Isso permite que a gestão do Tribunal aloque forças-tarefa de forma proativa, estratégica e baseada em dados.
 
 --- 
 
