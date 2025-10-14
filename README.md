@@ -1,23 +1,12 @@
-# 📝 Relatório de Avaliação de Métricas e Resultados (Taxa de Congestionamento)
+# 📝 Relatório de Avaliação da Taxa de Congestionamento 
 
 ## 🎯 Objetivo
 
-Este relatório tem como objetivo apresentar a avaliação das métricas e resultados obtidos a partir da análise de dados jurídicos referentes à junção de juizados dentro das varas, com o intuito de responder à seguinte **hipótese: A transformação de juizados dentro das varas pode ter impactado os processos do Juizado Especial Cível?**
+Este relatório tem como objetivo apresentar a avaliação da **Taxa de Congestionamento** obtida a partir da análise de dados jurídicos presentes no **Sistema de Estatística e Transparência (SET)** do Tribunal de Justiça do Estado de Goiás.
 
 ## 🗺️ Escopo da Análise
 
-A análise dos dados foi feita para as comarcas de **Goiás, Itaberaí, Inhumas, Jaraguá, Minaçu, Niquelândia, Novo Gama e São Luís de Montes Belos**, em que alguns indicadores de desempenho chamaram a atenção no **Sistema de Estatística e Transparência (SET)** do Tribunal de Justiça do Estado de Goiás.
-
-Além disso, foi realizada também uma análise **comparativa** entre:
-
-- 🧩 **Comarcas com transformação (junção de juizados em varas):** *Goiás, Itaberaí, Inhumas, Jaraguá, Minaçu, Niquelândia, Novo Gama, São Luís de Montes Belos;*
-
-- 🔍 **Comarcas sem transformação:** *Goianira, Goiatuba, Santa Helena de Goiás, Valparaíso de Goiás.*
-
-Agora, nesse **Projeto**, partiremos para a análise **antes e depois** da unificação dos juizados, considerando apenas as Áreas de Ação **diferentes** dos juizados especiais.
-
-O objetivo dessa comparação é **mensurar o impacto** que tal alteração possa ter causado no sistema judiciário.
-
+A análise dos dados foi feita para todas as comarcas a fim de fundamentar um estudo de predição a respeito da **Taxa de Congestionamento**.
 
 ## 🛠️ Metodologia
 
@@ -25,9 +14,10 @@ A análise foi conduzida com base na linguagem `Python`, utilizando bibliotecas 
 
 ## 🎯 Propósito Analítico
 
-O objetivo é fornecer **insights** que contribuam para **verificar se a hipótese levantada é verdadeira ou não**. E, caso a hipótese se confirme, **indicar possíveis caminhos** para a resolução do problema identificado.
+O objetivo é criar o **Índice de Risco de Congestionamento (IRC)** mensal para cada unidade judicial, gerando **alertas automatizados em dashboards de BI** para as comarcas com maior risco previsto nos próximos 3 meses. Isso permite que a gestão do Tribunal aloque forças-tarefa de forma proativa, estratégica e baseada em dados.
 
 --- 
 
-✅ **Resumo:** Este estudo compara indicadores de comarcas com e sem a junção de juizados em varas, usando uma stack Python/Flask para explorar efeitos potenciais nos processos do **Juizado Especial Cível**, com base em sinais do **SET/TJGO**.
+✅ **Resumo:** Solução de analytics que prevê congestionamento judicial e direciona recursos do TJGO de forma antecipada e estratégica.
+
 
