@@ -107,8 +107,11 @@ class ProcessosAnalisador:
         ).fillna(0).astype({'Pendentes': 'int'})
        
         # Calcular taxa de congestionamento no ano
-        estatisticas['Taxa de Congestionamento (%)'] = (
-            (estatisticas['Pendentes'] / (estatisticas['Pendentes'] + estatisticas['Baixados'])) * 100
+        soma_pend_baix = estatisticas['Pendentes'] + estatisticas['Baixados']
+        estatisticas['Taxa de Congestionamento (%)'] = np.where(
+            soma_pend_baix > 0,
+            (estatisticas['Pendentes'] / soma_pend_baix) * 100,
+            0
         ).round(2)
 
         # Adicionar linha de totais
