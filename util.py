@@ -196,7 +196,7 @@ class ProcessosAnalisador:
         )
         return fig_barras
     
-    # Gráfico de Linhas Filtrados por Comarca
+    # Gráfico de Linhas Filtrados por Comarca e Área de Ação
     def plotar_graficos_comarca(self, comarca): 
         
         MAX_ANO = 2025
@@ -288,3 +288,94 @@ class ProcessosAnalisador:
         
         return fig_linha
        
+    # Gráfico de Linhas Filtrados por Comarca e Serventia
+    def plotar_graficos_comarca_serventia(self, comarca): 
+        
+        MAX_ANO = 2025
+        
+        # Base preparada
+        df_grafico = self.df[['processo', 'serventia', 'comarca',
+                            'data_distribuicao', 'data_baixa']].copy()
+
+        df_grafico['data_distribuicao'] = pd.to_datetime(df_grafico['data_distribuicao'], errors='coerce')
+        df_grafico['data_baixa'] = pd.to_datetime(df_grafico['data_baixa'], errors='coerce')
+
+        # Filtro (case-insensitive, ignora espaços)
+        alvo = (str(comarca) or '').strip().casefold()
+        df = df_grafico[df_grafico['comarca'].astype(str).str.strip().str.casefold() == alvo]
+
+        if df.empty:
+            fig = px.line(title=f'Sem dados para a comarca: {comarca}')
+            fig.update_layout(xaxis_title='Ano', yaxis_title='Taxa de Congestionamento (%)', yaxis_range=[0,100])
+            return fig
+
+        df['ano_distribuicao'] = df['data_distribuicao'].dt.year
+        df['ano_baixa'] = df['data_baixa'].dt.year
+
+        # Contagens por ano
+        # Pendentes: distribuídos no ano e sem baixa
+        pend = (df[(df['data_baixa'].isna()) & (df['ano_distribuicao'] <= MAX_ANO)]
+            .groupby(['comarca','serventia','ano_distribuicao'])
+            .size().reset_index(name='pendentes')
+            .rename(columns={'ano_distribuicao':'ano'}))
+
+        # Baixados: com baixa no ano
+        baix = (df[(df['data_baixa'].notna()) & (df['ano_baixa'] <= MAX_ANO)] 
+            .groupby(['comarca','serventia','ano_baixa'])
+            .size().reset_index(name='baixados')
+            .rename(columns={'ano_baixa':'ano'}))
+        
+        base = pend.merge(baix, on=['comarca','serventia','ano'], how='outer').fillna(0)
+
+        # Taxa de Congestionamento
+        soma = base['pendentes'] + base['baixados']
+        base['Taxa de Congestionamento (%)'] = np.where(
+            soma > 0,
+            (base['pendentes'] / soma) * 100,
+            np.nan
+        ).round(2)
+
+        # Limpeza final para o plot
+        df_plot = (base[['comarca','serventia','ano','Taxa de Congestionamento (%)']]
+           .dropna(subset=['ano'])
+           .copy())
+        
+        # Garantir tipo inteiro para o eixo X
+        df_plot['ano'] = df_plot['ano'].astype(int)
+        df_plot = df_plot[df_plot['ano'] <= MAX_ANO]
+
+        # Ordenação para um X crescente
+        df_plot = df_plot.sort_values(['serventia', 'ano'])
+
+        # Anos disponíveis para o eixo X (apenas desta comarca)
+        anos_disponiveis = sorted(pd.unique(pd.concat([
+            df.loc[df['ano_distribuicao'] <= MAX_ANO, 'ano_distribuicao'],
+            df.loc[df['ano_baixa'] <= MAX_ANO, 'ano_baixa']
+            ]).dropna().astype(int)))
+
+        # Gráfico de Linhas
+        fig_linha = px.line(
+            df_plot,
+            x='ano',
+            y='Taxa de Congestionamento (%)',
+            color='serventia',
+            markers=True,
+            title=f'Taxa de Congestionamento por Ano — {comarca}',
+            labels={'ano': 'Ano', 'serventia': 'Serventia'}
+        )
+        fig_linha.update_traces(
+            mode='lines+markers',
+            hovertemplate='Ano: %{x}<br>Serventia: %{fullData.name}<br>Taxa: %{y:.2f}%<extra></extra>'
+        )
+        fig_linha.update_layout(
+            xaxis_title='Ano',
+            yaxis_title='Taxa de Congestionamento (%)',
+            legend_title_text='Serventia',
+            yaxis_range=[0, 100],
+            margin=dict(l=40, r=20, t=60, b=40)
+        )
+
+        # Faz o eixo X mostrar exatamente os anos disponíveis
+        fig_linha.update_xaxes(tickmode='array', tickvals=anos_disponiveis, ticktext=[str(a) for a in anos_disponiveis])
+        
+        return fig_linha
