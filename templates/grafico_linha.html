@@ -174,7 +174,7 @@
           </button>
 
           <button style="width: 90%; border: none; margin-top: 10px;">
-              <a href="/grafico_linha" class="container mt-5" style="color: #000000;">Gráfico em Linha</a>
+              <a href="/grafico_linha1" class="container mt-5" style="color: #000000;">Gráfico em Linha</a>
           </button>
         </div>
     </nav>
@@ -183,10 +183,10 @@
   <article class="text-center">
     <div class="text-center" style="margin-left: 3cm;">
         <h1 class="text-center" style="align-items: center; padding-bottom: 1cm;">
-          Análise de Processos por Área de Ação
+          Análise de Processos por Serventia
         </h1>
   
-        <form method="get" action="/grafico_linha">
+        <form method="get" action="/grafico_linha1">
           <div class='form-group' style="margin: 0 auto;">
               <label for='comarca'>Comarca:</label>
               <select id='comarca' name='comarca'>
@@ -200,7 +200,7 @@
         </form>
 
         <h3 style="padding: 1cm; padding-left: 0cm;">
-          Taxa de Congestionamento (%) X Ano - {{ selected_comarca }}
+          Taxa de Congestionamento por Ano - {{ selected_comarca }}
         </h3>
     </div>
 
