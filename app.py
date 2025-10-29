@@ -118,5 +118,32 @@ def grafico_linha():
         selected_comarca=filtro_comarca
     )
 
+@app.route('/grafico_linha1')
+def grafico_linha1():
+    # Lista de comarcas para o dropdown
+    comarcas = analisador.obter_comarcas_disponiveis()
+    # Valor padrão: 'GOIÁS' se existir, senão a primeira
+    default_comarca = 'ABADIÂNIA' if 'ABADIÂNIA' in comarcas else (comarcas[0] if comarcas else '')
+
+    # Pega o parâmetro ou usa o padrão acima
+    filtro_comarca = (request.args.get('comarca') or default_comarca).strip()
+
+    # Gera o gráfico CORRETO (por comarca)
+    fig = analisador.plotar_graficos_comarca_serventia(filtro_comarca)
+    fig.update_layout(
+        title=None,
+        xaxis_title='Ano',
+        yaxis_title='Taxa de Congestionamento (%)',
+        legend_title='Serventia'
+    )
+    figura_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
+
+    return render_template(
+        'grafico_linha.html',
+        figura_html=figura_html,
+        comarcas=comarcas,
+        selected_comarca=filtro_comarca
+    )
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)
