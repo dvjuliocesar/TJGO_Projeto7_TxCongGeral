@@ -5,4 +5,5 @@ uploads/
 .venv/
 __pycache__/
 datasets/
+data/
 
