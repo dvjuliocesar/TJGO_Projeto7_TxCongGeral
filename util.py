@@ -59,7 +59,7 @@ class ProcessosAnalisador:
         """
         Retorna os anos disponíveis na coluna de data de distribuição
         """
-        return sorted(self.df['data_distribuicao'].dt.year.unique())
+        return sorted(self.df['data_baixa'].dt.year.unique())
     
     def calcular_estatisticas(self, comarca, ano_selecionado):
         """
