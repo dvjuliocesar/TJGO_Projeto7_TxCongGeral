@@ -16,14 +16,12 @@ class ProcessosAnalisador:
 
         # Carregar os arquivos CSV e concatenar em um único DataFrame
         dfs = []
-        for arquivo in arquivo_csv:
-            # Extrair o ano do nome do arquivo
-            ano = int(arquivo.split('_')[-1].split('.')[0])
+        for arquivo in arquivo_csv:  # lista/iterável com os caminhos tipo 'processos_1.csv', 'processos_2.csv', ...
             df_ano = pd.read_csv(arquivo, sep=',', encoding='utf-8')
-            df_ano['ano_arquivo'] = ano  # Adicionar coluna com o ano do arquivo
             dfs.append(df_ano)
 
         df = pd.concat(dfs, ignore_index=True)
+
         # Verificar o nome correto das colunas (pode haver diferenças de acentuação ou espaços)
         colunas = df.columns.tolist()
         
@@ -32,7 +30,7 @@ class ProcessosAnalisador:
         coluna_distribuicao = [col for col in colunas if 'data_distribuicao' in col.lower()][0]
         coluna_baixa = [col for col in colunas if 'data_baixa' in col.lower()][0]
         coluna_area_acao = [col for col in colunas if 'nome_area_acao' in col.lower()][0]
-        coluna_processo_id = [col for col in colunas if 'processo' in col.lower()][0]
+        coluna_processo_id = [col for col in colunas if 'numero' in col.lower()][0]
         coluna_comarca = [col for col in colunas if 'comarca' in col.lower()][0]
         
         # Renomear colunas para garantir consistência
@@ -40,7 +38,7 @@ class ProcessosAnalisador:
             coluna_distribuicao: 'data_distribuicao',
             coluna_baixa: 'data_baixa',
             coluna_area_acao: 'nome_area_acao',
-            coluna_processo_id: 'processo',
+            coluna_processo_id: 'numero',
             coluna_comarca: 'comarca',
             coluna_serventia: 'serventia'
         })
@@ -55,13 +53,13 @@ class ProcessosAnalisador:
         """
         Retorna as comarcas disponíveis
         """
-        return sorted(self.df['comarca'].unique())
+        return sorted(self.df['comarca'].dropna().astype(str).unique())
     
     def obter_anos_disponiveis(self):
         """
         Retorna os anos disponíveis na coluna de data de distribuição
         """
-        return sorted(self.df['data_distribuicao'].dt.year.unique())
+        return sorted(self.df['data_baixa'].dt.year.unique())
     
     def calcular_estatisticas(self, comarca, ano_selecionado):
         """
@@ -77,7 +75,7 @@ class ProcessosAnalisador:
         # Agrupar por nome_area_acao
         estatisticas = df_ano.groupby(['nome_area_acao', 'comarca','serventia']).agg(
             Distribuídos=('data_distribuicao', 'count') # Quantidade de datas distribuídas
-        ).reset_index()
+        ).reset_index().astype({'Distribuídos': 'int'})
         
         # Calcular baixados no ano
         baixados_no_ano = df_comarca[
@@ -93,7 +91,7 @@ class ProcessosAnalisador:
             baixados_por_area.rename('Baixados'), 
             on=['nome_area_acao', 'comarca','serventia'], 
             how='left'
-        ).fillna(0)
+        ).fillna(0).astype({'Baixados': 'int'})
         
         # Calcular pendentes
         pendentes_por_area = df_ano[df_ano['data_baixa'].isna()].groupby(
@@ -144,7 +142,7 @@ class ProcessosAnalisador:
         df_grafico = df_grafico[['processo','nome_area_acao', 'comarca', 'data_distribuicao', 'data_baixa']]
         df_grafico['data_distribuicao'] = pd.to_datetime(df_grafico['data_distribuicao'], errors='coerce')
         df_grafico['data_baixa'] = pd.to_datetime(df_grafico['data_baixa'], errors='coerce')
-        df_grafico['ano_distribuicao'] = df_grafico['data_distribuicao'].dt.year
+        df_grafico['ano_baixa'] = df_grafico['data_baixa'].dt.year
 
         # Baixar dados do ano selecionado
         baixados_por_area = df_grafico[
@@ -199,10 +197,10 @@ class ProcessosAnalisador:
     # Gráfico de Linhas Filtrados por Comarca e Área de Ação
     def plotar_graficos_comarca(self, comarca): 
         
-        MAX_ANO = 2025
+        MAX_ANO = 2024
         
         # Base preparada
-        df_grafico = self.df[['processo', 'nome_area_acao', 'comarca',
+        df_grafico = self.df[['numero', 'nome_area_acao', 'comarca',
                             'data_distribuicao', 'data_baixa']].copy()
 
         df_grafico['data_distribuicao'] = pd.to_datetime(df_grafico['data_distribuicao'], errors='coerce')
@@ -291,10 +289,10 @@ class ProcessosAnalisador:
     # Gráfico de Linhas Filtrados por Comarca e Serventia
     def plotar_graficos_comarca_serventia(self, comarca): 
         
-        MAX_ANO = 2025
+        MAX_ANO = 2024
         
         # Base preparada
-        df_grafico = self.df[['processo', 'serventia', 'comarca',
+        df_grafico = self.df[['numero', 'serventia', 'comarca',
                             'data_distribuicao', 'data_baixa']].copy()
 
         df_grafico['data_distribuicao'] = pd.to_datetime(df_grafico['data_distribuicao'], errors='coerce')

@@ -15,11 +15,11 @@ def tabela():
 
     # Pega o parâmetro de filtro da URL
     filtro_comarca = request.args.get('comarca', 'ABADIÂNIA')
-    filtro_ano = request.args.get('ano', '2022')
+    filtro_ano = request.args.get('ano', '2014')
 
     # Verifica se o filtro de ano está vazio ou é inválido
     if filtro_ano == '' or not filtro_ano.isdigit():
-        filtro_ano = '2022'  # Se vazio ou inválido, força o valor padrão '2020'
+        filtro_ano = '2014'  # Se vazio ou inválido, força o valor padrão '2020'
 
     # Converte filtro_ano para inteiro
     filtro_ano = int(filtro_ano)
@@ -64,11 +64,11 @@ def tabela():
 def grafico():
 
     # Pega o parâmetro de filtro da URL
-    filtro_ano = request.args.get('ano', '2022')
+    filtro_ano = request.args.get('ano', '2014')
 
     # Verifica se o filtro de ano está vazio ou é inválido
     if filtro_ano == '' or not filtro_ano.isdigit():
-        filtro_ano = '2022'  # Se vazio ou inválido, força o valor padrão '2020'
+        filtro_ano = '2014'  # Se vazio ou inválido, força o valor padrão '2020'
 
     # Converte filtro_ano para inteiro
     filtro_ano = int(filtro_ano)
@@ -146,4 +146,4 @@ def grafico_linha1():
     )
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5002)

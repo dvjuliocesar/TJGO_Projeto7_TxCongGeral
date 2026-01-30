@@ -4,4 +4,7 @@ uploads/
 __pycache__/
 datasets/
 data/
+dataclean/
+results/
+
 

@@ -199,7 +199,7 @@
                   <option value="">Selecione um ano</option>
                   <!-- Abaixo serão listados os anos únicos para selecionar -->
                   {% for ano in anos %}
-                      <option value="{{ ano }}" {% if ano == request.args.get('ano', '2022') %}selected{% endif %}>
+                      <option value="{{ ano }}" {% if ano == request.args.get('ano', '2014') %}selected{% endif %}>
                           {{ ano }}
                       </option>
                   {% endfor %}
