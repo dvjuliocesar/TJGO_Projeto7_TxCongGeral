@@ -2,7 +2,7 @@
 
 ## 🎯 Objetivo
 
-Este relatório tem como objetivo apresentar a avaliação da **Taxa de Congestionamento** obtida a partir da análise de dados jurídicos presentes no **Sistema de Estatística e Transparência (SET)** do Tribunal de Justiça do Estado de Goiás.
+Este relatório tem como objetivo apresentar a avaliação da **Taxa de Congestionamento Mensal** obtida a partir da análise de dados jurídicos presentes no **Sistema de Estatística e Transparência (SET)** do Tribunal de Justiça do Estado de Goiás.
 
 ## 🗺️ Escopo da Análise
 
