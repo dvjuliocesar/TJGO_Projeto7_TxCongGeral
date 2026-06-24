@@ -5,5 +5,7 @@ __pycache__/
 dataclean/
 results/
 results_concat/
+.tmp/
+
 
 
